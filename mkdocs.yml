@@ -1,0 +1,4 @@
+site_name: MkDocs Test
+theme:
+  name: material
+
