@@ -1,4 +1,8 @@
-site_name: MkDocs Test
+site_name: SAC Labs
 theme:
   name: material
+nav:
+  - Home: index.md
+  - About: about.md
+  - Repos: repos.md
 

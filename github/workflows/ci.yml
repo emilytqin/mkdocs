@@ -1,0 +1,33 @@
+name: Trigger to update site when repos are updated
+
+on: 
+  repository_dispatch:
+    types: [repo_created, repo_deleted]
+
+jobs:
+  update-repos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install PyGithub
+
+      - name: Run script to update repos.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN_REPOS }}
+        run: python update_repos.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@github.com"
+          git add docs/repos.md
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update repos.md" && git push)
